@@ -41,6 +41,77 @@
 						<h2>JavaScript</h2>
 						<img src="img/js-logo.png" />
 					</section>
+					<section>
+						<h2>Historique</h2>
+						<ul>
+							<li class="fragment">Créé par <a href="https://fr.wikipedia.org/wiki/Brendan_Eich">Brendan Eich</a> en 1995.</li>
+							<li class="fragment">Petit langage de script, rien à voir avec Java.</li>
+							<li class="fragment">Ajax en 2005.</li>
+							<li class="fragment">Pas de Flash sur iPhone. HTML5 first Draft 2008.</li>
+							<li class="fragment">ECMAScript 5 en 2009.</li>
+							<li class="fragment">Node.js en 2009.</li>
+							<li class="fragment">WebGL sur tous les navigateurs en 2013.</li>
+							<li class="fragment">asm.js en 2013.</li>
+							<li class="fragment">WebAssembly annoncé en 2015.</li>
+							<li class="fragment">ECMAScript 6 Juin 2015.</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Problématiques</h2>
+						<ul>
+							<li class="fragment">Langage interprété</li>
+							<li class="fragment">Pas de typage</li>
+							<li class="fragment">Langage orienté objet à prototype</li>
+							<li class="fragment">Le positionnement des fonctions a un ordre</li>
+							<li class="fragment"><i>this</i> dépend du contexte d'exécution !</li>
+							<li class="fragment">Les navigateurs ne supportent pas tous la dernière version d'ECMAScript</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Alternatives</h2>
+						<li class="fragment">ES6 avec <a href="https://babeljs.io/">Babel</a></li>
+						<li class="fragment"><a href="http://www.typescriptlang.org/">TypeScript</a></li>
+						<li class="fragment"><a href="https://www.dartlang.org/">Dart</a></li>
+						<li class="fragment"><a href="http://haxe.org/">Haxe</a></li>
+					</section>
+					<section>
+						<h2><a href="https://stateofjs.com/">State of JS</a></h2>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>TypeScript</h2>
+						<img src="img/ts-logo.png" />
+					</section>
+					<section>
+						<h2>Historique et but</h2>
+						<ul>
+							<li class="fragment">Développé par Microsoft en 2012, libre et open source.</li>
+							<li class="fragment">Cocréé par <a href="https://fr.wikipedia.org/wiki/Anders_Hejlsberg">Anders Hejlsberg</a>, principal inventeur de C#.</li>
+							<li class="fragment">Basé sur les standards d'ECMAScript.</li>
+							<li class="fragment">Permet le développement d'applications à grande échelle.</li>
+							<li class="fragment">Langage typé.</li>
+							<li class="fragment">Compilé en JavaScript.</li>
+							<li class="fragment">Tout code JavaScript existant peut-être appelé en TypeScript.</li>
+							<li class="fragment">Tout code TypeScript peut-être utiliser (après compilation) en JavaScript.</li>
+							<li class="fragment">Démarrage avec des fichiers de définitions externes.</li>
+							<li class="fragment">L'éco-système JS migre progressivement vers TS : Angular, Vue, Pixi.js, Babylons.js...</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Déclaration de variables</h2>
+					<pre class="fragment"><code class="typescript">//types primitifs :
+let nom:string = "Aymeric";
+let isMale:boolean = true;
+let i:number = -0.32;
+let tab:Array<any> = [7, "test", nom];
+let obj:Object = {x:15, y:-3.5};
+
+const PI:number = 3.14;
+
+//output
+console.log(nom, isMale);</code></pre>
 				</section>
 
 			</div>
