@@ -69,10 +69,12 @@
 					</section>
 					<section>
 						<h2>Alternatives</h2>
-						<li class="fragment">ES6 avec <a href="https://babeljs.io/">Babel</a></li>
-						<li class="fragment"><a href="http://www.typescriptlang.org/">TypeScript</a></li>
-						<li class="fragment"><a href="https://www.dartlang.org/">Dart</a></li>
-						<li class="fragment"><a href="http://haxe.org/">Haxe</a></li>
+						<ul>
+							<li class="fragment">ES6 avec <a href="https://babeljs.io/">Babel</a></li>
+							<li class="fragment"><a href="http://www.typescriptlang.org/">TypeScript</a></li>
+							<li class="fragment"><a href="https://www.dartlang.org/">Dart</a></li>
+							<li class="fragment"><a href="http://haxe.org/">Haxe</a></li>
+						</ul>
 					</section>
 					<section>
 						<h2><a href="https://stateofjs.com/">State of JS</a></h2>
@@ -257,6 +259,65 @@ function factorialCalculation2(factorial:number):number
 			console.log("dead");
 	}
 }</code></pre>
+				</section>
+				<section>
+					<section>
+						<h2>L'encapsulation</h2>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<p>Limiter l'accès aux données (propriétés et méthodes).</p>
+						<p class="fragment">Contrôler quelles propriétés et méthodes peuvent être utilisées à l'<i>extérieur</i> de la classe, <i>dedans</i> et par ses <i>enfants</i>.</p>
+					</section>
+					<section>
+						<h2>Attributs de propriétés et méthodes</h2>
+						<ul>
+							<li class="fragment"><b><i>public</i></b> : accessible partout</li>
+							<li class="fragment"><b><i>private</i></b> : accessible uniquement au sein de la classe</li>
+							<li class="fragment"><b><i>protected</i></b> : accessible au sein de la classe et des classes qui en héritent (enfants)</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Les accesseurs (getters / setters)</h2>
+						<p class="fragment">Contrôler la lecture / écriture de propriétés.</p>
+						<p class="fragment">On peut utiliser <i>get</i> et <i>set</i> pour accèder à des données comme si c'était des propriétés.</p>
+						<pre class="fragment"><code class="typescript">export class Bird
+{
+    private let _life:number = 2;
+
+    get life():number
+    {
+        return this._life;
+    }
+    set life(value:number)
+    {
+        this._life = value;
+        console.log("life has changed");
+    }
+
+}</code></pre>
+
+					<pre class="fragment"><code class="typescript">var bird:Bird = new Bird();
+bird.life = 2;</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Conventions</h2>
+					<pre><code class="typescript">//nom de classe commence par une majuscule :
+new Bird();
+
+//nom de méthode / propriété public commence par une minuscule :
+bird.life = 2;
+
+//nom de méthode / propriété privée commence par un underscore :
+_life = 2;</code></pre>
+				<ul>
+					<li class="fragment">L'encapsulation sert à protéger son code et s'assurer que le fonctionnement interne de l'objet ne sera pas modifié par un tiers.</li>
+					<li class="fragment">L'encapsulation permet de gérer la lecture / écriture des propriétés.</li>
+					<li class="fragment">Il faut toujours déclarer ses propriétés en private (ou protected).</li>
+				</ul>
 				</section>
 
 			</div>
