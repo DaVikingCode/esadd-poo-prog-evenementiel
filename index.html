@@ -105,13 +105,158 @@
 let nom:string = "Aymeric";
 let isMale:boolean = true;
 let i:number = -0.32;
-let tab:Array<any> = [7, "test", nom];
-let obj:Object = {x:15, y:-3.5};
+let tab:any[] = [7, "test", nom];
+let obj:object = {x:15, y:-3.5};
 
 const PI:number = 3.14;
 
 //output
 console.log(nom, isMale);</code></pre>
+					<p class="fragment"><small>vous avez déjà manipulé des objets...</small></p>
+					<p class="fragment"><small>tout est objet (avec un type)...</small></p>
+				</section>
+				<section>
+					<h2>La POO</h2>
+					<p>Opposition à la programmation procédurale</p>
+					<p>Un petit jeu vidéo atteint plusieurs milliers de ligne de code.</p>
+					<p>Comment séparer les tâches ? Comment s'organiser ?</p>
+					<p>Comment réutiliser proprement son code ?</p>
+					<p>Comment travailler à plusieurs ?</p>
+				</section>
+				<section>
+					<h2>Qu'est ce qu'un objet ?</h2>
+					<img class="fragment" src="img/bird.png" />
+					<p class="fragment">Un ensemble de <b><i>propriétés</i></b> et de <b><i>méthodes</i></b></p>
+					<pre class="fragment"><code class="typescript">//instanciation
+let bird:Bird = new Bird();
+
+//propriétés
+bird.color = 0xFF0000;
+bird.friction = 0.12;
+
+//méthodes
+bird.fly();
+bird.launch(12, -5);</code></pre>
+					<p class="fragment">Mot clef <b><i>new</i></b></p>
+				</section>
+				<section>
+					<section>
+						<h2>À quoi sert un objet ?</h2>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>						
+						<img src="img/birds-pigs.jpg" />
+						<p class="fragment">Réutiliser son code</p>
+						<pre class="fragment"><code class="typescript">let redBird:Bird = new Bird();
+redBird.color = 0xFF0000;
+
+let blueBird:Bird = new Bird();
+blueBird.color = 0x0000FF;
+
+redBird.friction = 0.12;
+blueBird.friction = 0.18;</code></pre>
+					</section>
+					<section>
+						<img src="img/blue-bird.jpg" />
+						<p class="fragment">Réutiliser son code</p>
+						<pre class="fragment"><code class="typescript">function onTouch(evt:Event):void
+{	
+	blueBird.destroy();
+
+	for (let i = 0; i < 3; ++i)
+	{
+		let smallBlueBird:Bird = new Bird();
+	}
+}</code></pre>
+
+					</section>
+				</section>
+				<section>
+					<h2>Les fonctions</h2>
+					<pre class="fragment"><code class="typescript">function somme(a:number, b:number):number
+{
+	return a + b;
+}
+
+function positionner(posX:number, posY:number = 0):void
+{
+	monObjet.x = posX;
+	monObjet.y = posY;
+}</code></pre>
+					
+					<p class="fragment">Appellées aussi <b><i>méthodes</i></b></p>
+				</section>
+				<section>
+					<h2>La récursivité</h2>
+					<p class="fragment">Problème des <a href="http://fr.wikipedia.org/wiki/Tours_de_Hano%C3%AF">Tours d'Hanoï</a></p>
+					<img class="fragment" src="img/Tower_of_Hanoi.jpg" />
+					<pre class="fragment"><code class="typescript">function factorialCalculation(factorial:number):number
+{
+	if (factorial == 1)
+		return 1;
+	else
+		return factorial * factorialCalculation(factorial - 1);
+}
+function factorialCalculation2(factorial:number):number
+{
+	let result = 1;
+	for (let i = 1; i <= factorial; ++i)
+		result *= i;
+	
+	return result;
+}</code></pre>
+				</section>
+				<section>
+					<h2>Un objet est défini par une <b><i>classe</i></b></h2>
+
+					<pre class="fragment"><code class="typescript">export class Bird
+{
+	constructor()
+	{
+	}
+}</code></pre>
+					<ul>
+						<li class="fragment">nom</li>
+						<li class="fragment">constructeur</li>
+						<li class="fragment">propriétés</li>
+						<li class="fragment">méthodes</li>
+					</ul>
+				</section>
+				<section>
+					<h2>Constructeur</h2>
+					<p class="fragment">Le constructeur est la méthode qui est appelée pour créer l'objet.</p>
+					<pre class="fragment"><code class="typescript">export class Bird
+{
+	constructor()
+	{
+	}
+}</code></pre>
+					<p class="fragment">Un constructeur ne peut retourner <b><i>aucun</i></b> type !</p>
+				</section>
+				<section>
+					<h2>Destructeur</h2>
+					<p class="fragment">Fonction appelée par le <b><i>Garbage Collector</i></b> avant que sa mémoire ne soit rendue.</p>
+					<p class="fragment">Cette fonction n'existe pas en TypeScript / JavaScript <i>(on la codera nous-même)</i>, mais le garbage collector existe bien !</p>
+					<p class="fragment">Il libère la mémoire des objets qui ne sont plus utilisés en passant à intervale indéterminé.</p>
+				</section>
+				<section>
+					<h2>Un objet</h2>
+					<pre><code class="typescript">export class Bird
+{
+	public life:number = 2;
+
+	constructor() {
+		let velocityX:number = 0;
+	}
+
+	public hurt():void {
+		--life;
+		if (life <= -1)
+			console.log("dead");
+	}
+}</code></pre>
 				</section>
 
 			</div>
