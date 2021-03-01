@@ -285,7 +285,7 @@ function factorialCalculation2(factorial:number):number
 						<p class="fragment">On peut utiliser <i>get</i> et <i>set</i> pour accèder à des données comme si c'était des propriétés.</p>
 						<pre class="fragment"><code class="typescript">export class Bird
 {
-    private let _life:number = 2;
+    private _life:number = 2;
 
     get life():number
     {
@@ -313,11 +313,375 @@ bird.life = 2;
 
 //nom de méthode / propriété privée commence par un underscore :
 _life = 2;</code></pre>
-				<ul>
-					<li class="fragment">L'encapsulation sert à protéger son code et s'assurer que le fonctionnement interne de l'objet ne sera pas modifié par un tiers.</li>
-					<li class="fragment">L'encapsulation permet de gérer la lecture / écriture des propriétés.</li>
-					<li class="fragment">Il faut toujours déclarer ses propriétés en private (ou protected).</li>
-				</ul>
+					<ul>
+						<li class="fragment">L'encapsulation sert à protéger son code et s'assurer que le fonctionnement interne de l'objet ne sera pas modifié par un tiers.</li>
+						<li class="fragment">L'encapsulation permet de gérer la lecture / écriture des propriétés.</li>
+						<li class="fragment">Il faut toujours déclarer ses propriétés en private (ou protected).</li>
+					</ul>
+				</section>
+				<section>
+					<section>
+						<h2>Exemple</h2>
+						<img src="img/mario-kart.jpg" />
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<pre><code class="typescript">export class Vehicle
+{
+	public speed:number = 3;
+	protected _wheelFriction:number = 0.2;
+	private var _color:number = 0xFF0000;
+
+	constructor(color:number) {
+		this._color = color;
+	}
+
+	get color():number {
+		return this._color;
+	}
+}</code></pre>
+					</section>
+				</section>
+				<section>
+					<h2>Le mot clef <b><i>this</i></b></h2>
+					<p class="fragment">Désigne, dans une classe, l'instance courante de la classe elle-même.</p>
+					<pre class="fragment"><code class="typescript">export class Vehicle
+{
+	public speed:number = 3;
+
+	constructor(speed:number = 4) {
+		this.speed = speed;
+
+		this.y = 12;
+
+		trace(this instanceof Vehicle);
+	}
+}</code></pre>
+				</section>
+				<section>
+					<h2>Le mot clef <b><i>static</i></b></h2>
+					<p class="fragment">Il permet de rendre un membre utilisable dans un contexte de classe et non d'occurence.</p>
+					<p class="fragment">Pour utiliser une méthode ou propriété statique, on n'a pas besoin de construire l'objet.</p>
+					<pre class="fragment"><code class="typescript">let random:number = Math.random();
+
+public static intersecRec(rec1:Rectangle, rec2:Rectangle):Rectangle {
+	// calcul de l'intersection de 2 rectangles.
+}
+
+public static readonly GAME_VERSION:String = "8.0";</code></pre>
+				</section>
+				<section>
+					<section>
+						<h2>L'héritage</h2>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<p>Concept clef de la POO</p>
+						<p class="fragment">Notion empruntée au monde réel : <i>tout élément hérite d'un autre en le spécialisant</i>.</p>
+						<p class="fragment">La voiture hérite du véhicule. La moto hérite du véhicule</i>.</p>
+						<p class="fragment">Une voiture n'est pas une moto et inversement. Par contre elle est un véhicule tout comme la moto</i>.</p>
+					</section>
+					<section>
+						<img src="img/vehicle-heritage.jpg" />
+						<p class="fragment">Vehicle est la classe <i>mère</i>.</p>
+						<p class="fragment">Car et Bike sont des classes <i>dérivées</i>, <i>filles</i>.</p>
+					</section>
+					<section>
+						<p>L'héritage permet de réutiliser le code d'une classe de base.</p>
+						<p class="fragment">Il rajoute des fonctionnalités à une classe parent sans la modifier.</p>
+						<pre class="fragment"><code class="typescript">export class Vehicle
+{
+	public speed:number = 3;
+	protected _wheelFriction:number = 0.2;
+	private _color:number = 0xFF0000;
+
+	constructor() {
+	}
+
+	get color():number {
+		return this._color;
+	}
+}</code></pre>
+					</section>
+					<section>
+						<pre><code class="typescript">export class Car extends Vehicle
+{
+
+	constructor() {
+		super();
+		this.speed = 5;
+	}
+	public freinAMain():void {
+	}
+}</code></pre>
+
+						<pre class="fragment"><code class="typescript">export class Bike extends Vehicle
+{
+	public function Vehicle() {
+		this._wheelFriction = 0.5;
+	}
+	public function wheeling():void {
+	}
+}</code></pre>
+						<pre class="fragment"><code class="typescript">let bike:Bike = new Bike();
+bike.wheeling();
+console.log(bike.color);
+console.log(bike instanceof Vehicle, bike instanceof Car);</code></pre>
+						<p class="fragment">L'héritage permet de spécialiser un enfant.</p>
+					</section>
+					<section>
+						<p>On ne peut hériter que d'un seul parent à la fois (qui lui même hérite d'un parent...).</p>
+						<p class="fragment">Une classe enfant a accès aux propriétés et métodes <i>public</i> et <i>protected</i>.</p>
+						<p class="fragment">Les classes filles héritent <i>automatiquement</i> des fonctionnalités des classes mères.</p>
+						<p class="fragment">Utilisation du mot clef <i>extends</i>.</p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Le polymorphisme</h2>
+						<p><small>(du grec « poly » plusieurs et « morphê » forme)</small></p>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<p>Dans un arbre d’héritage, une méthode <i>polymorphe</i> est une méthode qui a plusieurs formes en fonction de la classe dans laquelle elle se situe.</p>
+						<p class="fragment">Nous allons <b>surcharger</b> des méthodes pour <b>redéfinir</b> des comportements de la classe qu'on hérite au sein de notre objet.</p>
+						<p class="fragment">On ne peut surcharger que les méthodes <i>public</i> et <i>protected</i>.</p>
+					</section>
+					<section>
+						<p>Le mot clef <i>override</i></p>
+						<pre class="fragment"><code class="typescript"> export class Vehicle
+{
+	public move():void {
+	    this.x += 3;
+	}
+}
+
+export class Plane extends Vehicle
+{	
+	override public move():void {
+	    this.y += 1;
+	}
+}</code></pre>
+					</section>
+					<section>
+						<p>Le mot clef <i>super</i></p>
+						<pre class="fragment"><code class="actionscript">export class Vehicle
+{
+	public move():void {
+	    this.x += 3;
+	}
+}
+
+export class Plane extends Vehicle
+{
+	override public move():void {
+
+	    super.move();
+	    this.y += 1;
+	}
+}</code></pre>
+						<p class="fragment"><small>Le mot clef <i>super</i> permet également de spécifier l'ordre.</small></p>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>La Display List</h2>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<p>Créée par Flash, reprise par de nombreux frameworks : <a href="http://pixijs.com/">Pixi.js</a>, <a href="http://www.cocos2d-x.org/">Cocos2D-x</a>, <a href="http://createjs.com/">CreateJS</a>...</p>
+						<p class="fragment">Hiérarchie, basée sur une relation conteneur-contenu. L'objet <i>Stage</i> est la racine.</p>
+						<img class="fragment" src="img/display-list.png" />
+					</section>
+					<section>
+						<p>Ajout d'un objet graphique à la liste d'affichage</p>
+						<pre class="fragment"><code class="actionscript">let sp:Sprite = new Sprite();
+this.addChild(sp);</code></pre>
+						<p class="fragment">Enlever un objet graphique de la liste d'affichage</p>
+						<pre class="fragment"><code class="actionscript">this.removeChild(sp);</code></pre>
+						<p class="fragment">Pile d'affichage</p>
+						<img class="fragment" src="img/pile-affichage.png" />
+					</section>
+					<section>
+						<p>Opérations</p>
+						<img class="fragment" src="img/pile-ajout.png" /> <img class="fragment" src="img/pile-retrait.png" /> <img class="fragment" src="img/pile-insertion.png" />
+					</section>
+					<section>
+						<p>Quelques propriétés et méthodes</p>
+						<pre class="fragment"><code class="actionscript">this.addChildAt(child:DisplayObject, index:number):DisplayObject
+this.removeChildAt(child:DisplayObject, index:number):DisplayObject
+this.getChildAt(index:number):DisplayObject
+this.getChildByName(name:string):DisplayObject
+this.numChildren // retourne le nombre de fils
+this.swapChildren(child1:DisplayObject, child2:DisplayObject):Container
+this.setChildIndex(child:DisplayObject, index:number):void</code></pre>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>L'évènementiel</h2>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<p>Un programme doit réagir en fonction des actions de l'utilisateur.</p>
+						<ul>
+							<li class="fragment">souris</li>
+							<li class="fragment">clavier</li>
+							<li class="fragment">microphone</li>
+							<li class="fragment">webcam</li>
+							<li class="fragment">kinect</li>
+							<li class="fragment">leap motion</li>
+							<li class="fragment">occulus rift</li>
+							<li class="fragment">accéléromètre</li>
+							<li class="fragment">gyroscope</li>
+							<li class="fragment">multi-touch</li>
+							<li class="fragment">...</li>
+						</ul>
+					</section>
+					<section>
+						<p>Le JavaScript est basé sur le modèle évènementiel (<i>design pattern Observer</i>).</p>
+						<p class="fragment">Il est composé de 3 éléments :</p>
+						<ul>
+							<li class="fragment">sujet</li>
+							<li class="fragment">évènements</li>
+							<li class="fragment">écouteurs</li>
+						</ul>
+					</section>
+					<section>
+						<img src="img/blue-bird.jpg" />
+						<p class="fragment">sujet : oiseau bleu</p>
+						<p class="fragment">évènement : touch</p>
+						<p class="fragment">écouteur : créer 3 petits oiseaux</p>
+						<pre class="fragment"><code class="typescript">let bird:BlueBird = new BlueBird();
+blueBird.once("pointerdown", this.onTouch.bind(this));
+
+public onTouch():void {
+	blueBird.destroy();
+
+	for (var i:uint = 0; i < 3; ++i)
+	    let smallBlueBird:BlueBird = new BlueBird();
+}</code></pre>
+					</section>
+					<section>
+						<p>On s'abonne à un sujet en spécifiant un évènement <b>addEventListener</b>.</p>
+						<p class="fragment">Le sujet produit un évènement <b>new Event</b>.</p>
+						<p class="fragment">Le sujet distribue cet évènement <b>dispatchEvent</b>.</p>
+						<p class="fragment">L'écouteur fait une action.</p>
+						<p class="fragment">On se désabonne de cet évènement <b>removeEventListener</b>.</p>
+					</section>
+					<section>
+						<p>Grâce au modèle évènementiel :</p>
+						<ul>
+							<li class="fragment">chaque objet et indépendant et autonome. Il dispatche des évènements lorsqu'il y a un changement d'état.</li>
+							<li class="fragment">l'objet n'est donc plus lié à un mais plusieurs contextes d'utilisation.</li>
+							<li class="fragment">débugger est très facile.</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>Les classes abstraites</h2>
+					<p class="fragment">Une classe abstraite est une classe dont l'implémentation n'est pas complète et qui n'est pas instanciable.</p>
+					<p class="fragment">Elle sert de base à d'autres classes dérivées.</p>
+					<pre class="fragment"><code class="actionscript">export abstract class ABird
+{
+	protected _friction:number;
+
+	constructor() {
+		this._friction = 12;
+	}
+}</code></pre>
+					<p class="fragment">Par convention, son nom commence avec un <i>A</i> majuscule.</p>
+				</section>
+				<section>
+					<section>
+						<h2>Les Interfaces</h2>
+						<a href="#" class="image navigate-down">
+							<img width="178" height="238" src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section>
+						<p>Les interfaces permettent de définir des méthodes <b>public</b> à implémenter obligatoirement par une classe.</p>
+						<p class="fragment">Une classe implémentant une interface doit définir les fonctions de même signature.</p>
+						<pre class="fragment"><code class="typescript">interface IBird
+{
+	throw(speedX:number, speedY:number):void;
+}</code></pre>
+
+						<pre class="fragment"><code class="typescript">export class ABird implements IBird
+{
+	public throw(speedX:number, speedY:number):void {
+	}
+}</code></pre>
+						<p class="fragment">On redéfinira la fonction throw en la surchargeant dans une classe enfant.</p>
+					</section>
+					<section>
+						<p>À l'inverse de l'héritage, il est possible d'implémenter plusieurs interfaces.</p>
+						<p class="fragment">Une interface peut-être utilisée comme annotation de type, tout comme une classe.</p>
+					</section>
+				</section>
+				<section>
+					<h2>Le modèle Entité / Composant</h2>
+					<ul>
+						<li class="fragment">Utilisé par de nombreux moteurs de jeu (<a href="http://unity3d.com/">Unity</a>, <a href="http://unrealengine.com/">Unreal Engine</a>, <a href="https://github.com/aduros/flambe">Flambe</a>...).</li>
+						<li class="fragment">Chaque moteur a eu sa façon d'implémenter le modèle entité / composant.</li>
+						<li class="fragment">Une <b>entité</b> est une classe de base à laquelle on ne peut qu'ajouter et supprimer des composants.</li>
+						<li class="fragment">Les <b>composants</b> ajoutent des fonctionnalités à l'<b>entité</b> (graphique, physique, input, script).</li>
+						<li class="fragment">Un <b>composant</b> doit pouvoir être réutilisé sur plusieurs <b>entités</b>.</li>
+						<li class="fragment">On peut utiliser l'<b>héritage</b> pour spécifier des <b>composants</b>.</li>
+					</ul>
+				</section>
+				<section>
+					<h2><a href="http://fr.wikipedia.org/wiki/Patron_de_conception">Design Pattern</a></h2>
+					<p class="fragment">Au nombre de 23, ils permettent de résoudre des problèmes de conception fréquemement rencontrés par les développeurs.</p>
+					<p class="fragment">Le JavaScript a été conçu sur le design pattern <b>observer</b>.</p>
+					<p class="fragment">Singleton : restreindre l'instanciation d'une classe à un seul objet.</p>
+
+					<pre class="fragment"><code class="typescript">export class SoundManager
+{
+	static private _instance:SoundManager;
+
+		static public getInstance():SoundManager {
+		    if (!this._instance)
+		    	this._instance = new SoundManager();
+
+		    return this._instance;
+		}
+
+		constructor() {
+	}
+}</code></pre>
+					
+				</section>
+				<section>
+					<h2>Le modèle <a href="http://fr.wikipedia.org/wiki/Mod%C3%A8le-vue-contr%C3%B4leur">MVC</a></h2>
+					<p class="fragment">Modèle très courant destiné à répondre aux besoins des applications interactives en séparant en 3 les tâches :</p>
+					<ul>
+						<li class="fragment">Modèle (de données), ex : logique, physique, base de données...</li>
+						<li class="fragment">Vue, ex: graphisme, interface utilisateur...</li>
+						<li class="fragment">Contrôleur, synchronise M et V, logique, évènements...</li>
+					</ul>
+				</section>
+				<section>
+					<h2>L'<a href="http://fr.wikipedia.org/wiki/UML_%28informatique%29">UML</a></h2>
+					<p class="fragment"><i>Unified Modeling Language</i>, langage de modélisation graphique à base de pictogramme pour spécifier, visualiser, modifier et construire les documents nécessaires au bon développement d'un logiciel orienté objet.</p>
+					<p class="fragment">14 types de diagrammes :</p>
+					<ul>
+						<li class="fragment">Diagramme de classe.</li>
+						<li class="fragment">Diagramme d'objets.</li>
+						<li class="fragment">Diagramme des packages.</li>
+						<li class="fragment">Diagramme d'activité.</li>
+						<li class="fragment">Diagramme de séquence.</li>
+					</ul>
 				</section>
 
 			</div>
