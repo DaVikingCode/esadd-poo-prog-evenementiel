@@ -421,10 +421,11 @@ public static readonly GAME_VERSION:string = "8.0";</code></pre>
 
 						<pre class="fragment"><code class="typescript">export class Bike extends Vehicle
 {
-	public function Vehicle() {
+	constructor() {
+		super();
 		this._wheelFriction = 0.5;
 	}
-	public function wheeling():void {
+	public wheeling():void {
 	}
 }</code></pre>
 						<pre class="fragment"><code class="typescript">let bike:Bike = new Bike();
