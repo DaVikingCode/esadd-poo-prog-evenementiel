@@ -34,14 +34,6 @@ export class Main extends Application {
         return this._container;
     }
 
-    private _notebookIndex = 1;
-    get notebookIndex() {
-        return this._notebookIndex;
-    }
-    set notebookIndex(index: number) {
-        this._notebookIndex = index;
-    }
-
     constructor() {
         super({
             backgroundColor: 0x000000,
