@@ -1,7 +1,7 @@
-import { AnimatedSprite, Texture } from "pixi.js";
-import { AObject } from "./AObject";
+import { AnimatedSprite, Sprite, Texture } from "pixi.js";
+import { AObjectAnimated } from "./AObjectAnimated";
 
-export class Enemy extends AObject {
+export class Enemy extends AObjectAnimated {
     private _hit = false;
     get hit() {
         return this._hit;
@@ -11,7 +11,7 @@ export class Enemy extends AObject {
             this._sprites.stop();
             this.removeChild(this._sprites);
 
-            this.texture = Texture.from("p_die.png");
+            this.addChild(Sprite.from("p_die.png"));
         }
 
         this._hit = value;
@@ -20,7 +20,7 @@ export class Enemy extends AObject {
     private _sprites: AnimatedSprite;
     private _timeBeforeDestruction = 0;
     constructor(textures: Texture[]) {
-        super(undefined);
+        super();
 
         this._sprites = new AnimatedSprite(textures);
 
@@ -40,13 +40,5 @@ export class Enemy extends AObject {
 
             if (this._timeBeforeDestruction > 2) this.kill = true;
         }
-    }
-
-    public getWidth() {
-        return this._sprites.width;
-    }
-
-    public getHeihght() {
-        return this._sprites.height;
     }
 }

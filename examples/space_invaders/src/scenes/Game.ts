@@ -1,11 +1,11 @@
 import { AScene } from "./AScene";
 import { Bullet } from "../objects/Bullet";
 import { Player, Direction } from "../objects/Player";
-import { BitmapText, Texture } from "pixi.js";
+import { BitmapText, Container, Texture } from "pixi.js";
 import { Main } from "..";
-import { AObject } from "../objects/AObject";
 import { Enemy } from "../objects/Enemy";
 import { Maths } from "../utils/Maths";
+import { IObject } from "../objects/IObject";
 
 export class Game extends AScene {
     private _timeTxt = new BitmapText("0 s", { fontName: "Space Invaders", fontSize: 30 });
@@ -13,7 +13,7 @@ export class Game extends AScene {
 
     private _player = new Player(Texture.from("spaceship_01.png"));
 
-    private _objects: AObject[] = [];
+    private _objects: IObject[] = [];
 
     // moving enemies
     private _moveEnemyPos = 0;
@@ -36,6 +36,7 @@ export class Game extends AScene {
         this._player.x = (Main.SCREEN_WIDTH - this._player.width) * 0.5;
         this._player.y = Main.SCREEN_HEIGHT - this._player.height - 50;
         this.addChild(this._player);
+        this._objects.push(this._player);
 
         for (let i = 0; i < 8; ++i)
             for (let j = 0; j < 3; ++j) {
@@ -95,18 +96,15 @@ export class Game extends AScene {
         }
 
         // update loop
-        this._player.update(timeDelta);
-        for (const object of this._objects) {
-            object.update(timeDelta);
-        }
+        for (const object of this._objects) object.update(timeDelta);
 
         // fire enemies
         this._timeBeforeMissile += timeDelta / 20;
         const enemies = this._objects.filter((obj) => obj instanceof Enemy);
         if (this._timeBeforeMissile > this._missileTime && enemies.length > 0) {
-            const enemy = enemies[Maths.randomIntBetweenTwoNumbers(0, enemies.length)];
+            const enemy = enemies[Maths.randomIntBetweenTwoNumbers(0, enemies.length)] as Enemy;
             const bullet = new Bullet(false);
-            bullet.x = enemy.x + (enemy.getWidth() - bullet.width) / 2;
+            bullet.x = enemy.x + (enemy.width - bullet.width) / 2;
             bullet.y = enemy.y + enemy.height + 5;
             this.addChild(bullet);
             this._objects.push(bullet);
@@ -136,7 +134,7 @@ export class Game extends AScene {
         // garbage
         for (const object of this._objects) {
             if (object.kill) {
-                this.removeChild(object);
+                this.removeChild(object.content);
                 this._objects.splice(this._objects.indexOf(object), 1);
             }
         }
@@ -145,12 +143,12 @@ export class Game extends AScene {
         this._timeTxt.text = Math.floor(this._time) + " s";
     }
 
-    private _isIntersecting(r1: AObject, r2: AObject): boolean {
+    private _isIntersecting(r1: IObject, r2: IObject): boolean {
         return !(
-            r2.x > r1.x + r1.getWidth() ||
-            r2.x + r2.getWidth() < r1.x ||
-            r2.y > r1.y + r1.getHeihght() ||
-            r2.y + r2.getHeihght() < r1.y
+            r2.x > r1.x + r1.width ||
+            r2.x + r2.width < r1.x ||
+            r2.y > r1.y + r1.height ||
+            r2.y + r2.height < r1.y
         );
     }
 
