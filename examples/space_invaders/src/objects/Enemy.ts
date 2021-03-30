@@ -1,5 +1,6 @@
 import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { AObjectAnimated } from "./AObjectAnimated";
+import { IObject } from "./IObject";
 
 export class Enemy extends AObjectAnimated {
     private _hit = false;
@@ -40,5 +41,9 @@ export class Enemy extends AObjectAnimated {
 
             if (this._timeBeforeDestruction > 2) this.kill = true;
         }
+    }
+
+    public static isEnemy(object: IObject): object is Enemy {
+        return (object as Enemy).hit !== undefined;
     }
 }

@@ -115,6 +115,8 @@ export class Game extends AScene {
 
         //check collisions
         for (const bullet of this._objects.filter((obj) => obj instanceof Bullet)) {
+            // could be done via this, but better would be a type enum in class directly for filtering...
+            // const enemies: Enemy[] = this._objects.filter(Enemy.isEnemy);
             for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
                 if (
                     !(enemy as Enemy).hit &&
