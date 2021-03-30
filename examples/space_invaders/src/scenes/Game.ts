@@ -81,16 +81,16 @@ export class Game extends AScene {
                 this._moveEnemyInvert = this._moveEnemyPos == 10;
 
                 for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
-                    if (this._moveEnemyInvert) enemy.y += 5;
-                    else enemy.x += 5;
+                    if (this._moveEnemyInvert) (enemy as Enemy).y += 5;
+                    else (enemy as Enemy).x += 5;
                 }
             } else if (this._moveEnemyPos > 0 && this._moveEnemyInvert) {
                 --this._moveEnemyPos;
                 this._moveEnemyInvert = this._moveEnemyPos != 0;
 
                 for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
-                    if (!this._moveEnemyInvert) enemy.y += 5;
-                    else enemy.x -= 5;
+                    if (!this._moveEnemyInvert) (enemy as Enemy).y += 5;
+                    else (enemy as Enemy).x -= 5;
                 }
             }
         }
@@ -116,12 +116,20 @@ export class Game extends AScene {
         //check collisions
         for (const bullet of this._objects.filter((obj) => obj instanceof Bullet)) {
             for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
-                if (!(enemy as Enemy).hit && (bullet as Bullet).fromPlayer && this._isIntersecting(enemy, bullet)) {
+                if (
+                    !(enemy as Enemy).hit &&
+                    (bullet as Bullet).fromPlayer &&
+                    this._isIntersecting(enemy as Enemy, bullet as Bullet)
+                ) {
                     bullet.kill = true;
                     (enemy as Enemy).hit = true;
                 }
             }
-            if (!this._player.hit && !(bullet as Bullet).fromPlayer && this._isIntersecting(this._player, bullet)) {
+            if (
+                !this._player.hit &&
+                !(bullet as Bullet).fromPlayer &&
+                this._isIntersecting(this._player as Player, bullet as Bullet)
+            ) {
                 bullet.kill = true;
                 this._player.hit = true;
 
@@ -134,7 +142,7 @@ export class Game extends AScene {
         // garbage
         for (const object of this._objects) {
             if (object.kill) {
-                this.removeChild(object.content);
+                this.removeChild((object as unknown) as Container); // this is madness https://basarat.gitbook.io/typescript/type-system/type-assertion#double-assertion
                 this._objects.splice(this._objects.indexOf(object), 1);
             }
         }
@@ -143,7 +151,7 @@ export class Game extends AScene {
         this._timeTxt.text = Math.floor(this._time) + " s";
     }
 
-    private _isIntersecting(r1: IObject, r2: IObject): boolean {
+    private _isIntersecting(r1: Container, r2: Container): boolean {
         return !(
             r2.x > r1.x + r1.width ||
             r2.x + r2.width < r1.x ||
