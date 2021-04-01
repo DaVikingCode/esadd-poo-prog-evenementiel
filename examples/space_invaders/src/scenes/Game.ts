@@ -71,6 +71,9 @@ export class Game extends AScene {
     public update(timeDelta: number) {
         super.update(timeDelta);
 
+        const bullets: Bullet[] = this._objects.filter(Bullet.isBullet);
+        const enemies: Enemy[] = this._objects.filter(Enemy.isEnemy); // better than this._objects.filter((obj) => obj instanceof Enemy) because typed!
+
         //moving enemies
         this._accMovementEnemies += timeDelta / 100;
         if (this._accMovementEnemies > 0.3) {
@@ -80,7 +83,7 @@ export class Game extends AScene {
                 ++this._moveEnemyPos;
                 this._moveEnemyInvert = this._moveEnemyPos == 10;
 
-                for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
+                for (const enemy of enemies) {
                     if (this._moveEnemyInvert) (enemy as Enemy).y += 5;
                     else (enemy as Enemy).x += 5;
                 }
@@ -88,7 +91,7 @@ export class Game extends AScene {
                 --this._moveEnemyPos;
                 this._moveEnemyInvert = this._moveEnemyPos != 0;
 
-                for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
+                for (const enemy of enemies) {
                     if (!this._moveEnemyInvert) (enemy as Enemy).y += 5;
                     else (enemy as Enemy).x -= 5;
                 }
@@ -100,7 +103,6 @@ export class Game extends AScene {
 
         // fire enemies
         this._timeBeforeMissile += timeDelta / 20;
-        const enemies = this._objects.filter((obj) => obj instanceof Enemy);
         if (this._timeBeforeMissile > this._missileTime && enemies.length > 0) {
             const enemy = enemies[Maths.randomIntBetweenTwoNumbers(0, enemies.length)] as Enemy;
             const bullet = new Bullet(false);
@@ -114,23 +116,22 @@ export class Game extends AScene {
         }
 
         //check collisions
-        for (const bullet of this._objects.filter((obj) => obj instanceof Bullet)) {
-            // could be done via this, but better would be a type enum in class directly for filtering...
-            // const enemies: Enemy[] = this._objects.filter(Enemy.isEnemy);
-            for (const enemy of this._objects.filter((obj) => obj instanceof Enemy)) {
+        for (const bullet of bullets) {
+            for (const enemy of enemies) {
                 if (
                     !(enemy as Enemy).hit &&
                     (bullet as Bullet).fromPlayer &&
-                    this._isIntersecting(enemy as Enemy, bullet as Bullet)
+                    Maths.isIntersecting(enemy as Enemy, bullet as Bullet)
                 ) {
                     bullet.kill = true;
                     (enemy as Enemy).hit = true;
                 }
             }
+
             if (
                 !this._player.hit &&
                 !(bullet as Bullet).fromPlayer &&
-                this._isIntersecting(this._player as Player, bullet as Bullet)
+                Maths.isIntersecting(this._player as Player, bullet as Bullet)
             ) {
                 bullet.kill = true;
                 this._player.hit = true;
@@ -151,15 +152,6 @@ export class Game extends AScene {
 
         this._time += timeDelta / 100;
         this._timeTxt.text = Math.floor(this._time) + " s";
-    }
-
-    private _isIntersecting(r1: Container, r2: Container): boolean {
-        return !(
-            r2.x > r1.x + r1.width ||
-            r2.x + r2.width < r1.x ||
-            r2.y > r1.y + r1.height ||
-            r2.y + r2.height < r1.y
-        );
     }
 
     private _shoot() {

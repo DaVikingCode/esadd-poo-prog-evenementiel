@@ -1,6 +1,7 @@
 import { Texture } from "pixi.js";
 import { Main } from "..";
 import { AObject } from "./AObject";
+import { IObject, ObjectType } from "./IObject";
 
 export class Player extends AObject {
     public direction = Direction.Idle;
@@ -23,6 +24,8 @@ export class Player extends AObject {
     public update(timeDelta: number) {
         super.update(timeDelta);
 
+        this._type = ObjectType.Player;
+
         if (!this._hit) {
             if (this.direction == Direction.Left) this.x -= this._speed * timeDelta;
             else if (this.direction == Direction.Right) this.x += this._speed * timeDelta;
@@ -30,6 +33,10 @@ export class Player extends AObject {
             if (this.x > Main.SCREEN_WIDTH) this.x = 0;
             else if (this.x < 0) this.x = Main.SCREEN_WIDTH - this.width;
         }
+    }
+
+    public static isPlayer(object: IObject): object is Player {
+        return (object as Player).type == ObjectType.Player;
     }
 }
 

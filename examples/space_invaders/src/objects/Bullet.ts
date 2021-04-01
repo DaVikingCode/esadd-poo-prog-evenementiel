@@ -1,6 +1,7 @@
 import { Texture } from "pixi.js";
 import { Main } from "..";
 import { AObject } from "./AObject";
+import { IObject, ObjectType } from "./IObject";
 
 export class Bullet extends AObject {
     get fromPlayer() {
@@ -8,6 +9,8 @@ export class Bullet extends AObject {
     }
     constructor(private _fromPlayer = true) {
         super(Texture.from(_fromPlayer ? "s_bullet.png" : "p_bullet.png"));
+
+        this._type = ObjectType.Bullet;
     }
 
     public update(timeDelta: number) {
@@ -22,5 +25,9 @@ export class Bullet extends AObject {
 
             if (this.y > Main.SCREEN_HEIGHT) this.kill = true;
         }
+    }
+
+    public static isBullet(object: IObject): object is Bullet {
+        return (object as Bullet).type == ObjectType.Bullet;
     }
 }

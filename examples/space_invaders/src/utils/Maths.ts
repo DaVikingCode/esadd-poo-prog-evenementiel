@@ -1,4 +1,4 @@
-import { Rectangle } from "pixi.js";
+import { Container, Rectangle } from "pixi.js";
 
 export class Maths {
     // for AABB check https://codepen.io/osublake/pen/eMvZmo?editors=0010
@@ -15,6 +15,15 @@ export class Maths {
         if (x1 + w1 > x2) if (x1 < x2 + w2) if (y1 + h1 > y2) if (y1 < y2 + h2) return true;
 
         return false;
+    }
+
+    public static isIntersecting(r1: Container, r2: Container): boolean {
+        return !(
+            r2.x > r1.x + r1.width ||
+            r2.x + r2.width < r1.x ||
+            r2.y > r1.y + r1.height ||
+            r2.y + r2.height < r1.y
+        );
     }
 
     public static getBestFitRatio(rect: Rectangle, into: Rectangle): number {

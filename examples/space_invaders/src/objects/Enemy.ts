@@ -1,6 +1,6 @@
 import { AnimatedSprite, Sprite, Texture } from "pixi.js";
 import { AObjectAnimated } from "./AObjectAnimated";
-import { IObject } from "./IObject";
+import { IObject, ObjectType } from "./IObject";
 
 export class Enemy extends AObjectAnimated {
     private _hit = false;
@@ -23,6 +23,8 @@ export class Enemy extends AObjectAnimated {
     constructor(textures: Texture[]) {
         super();
 
+        this._type = ObjectType.Enemy;
+
         this._sprites = new AnimatedSprite(textures);
 
         this._sprites.tint = 0xff0000;
@@ -44,6 +46,6 @@ export class Enemy extends AObjectAnimated {
     }
 
     public static isEnemy(object: IObject): object is Enemy {
-        return (object as Enemy).hit !== undefined;
+        return (object as Enemy).type == ObjectType.Enemy;
     }
 }
