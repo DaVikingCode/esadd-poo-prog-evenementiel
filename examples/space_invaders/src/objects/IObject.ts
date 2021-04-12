@@ -6,6 +6,7 @@ export interface IObject {
 
 export enum ObjectType {
     Undefined,
+    Boss,
     Bullet,
     Enemy,
     Player,

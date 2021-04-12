@@ -1,8 +1,10 @@
 import { AScene } from "./AScene";
+import { EndGame } from "./EndGame";
 import { Bullet } from "../objects/Bullet";
 import { Player, Direction } from "../objects/Player";
 import { BitmapText, Container, Texture } from "pixi.js";
 import { Main } from "..";
+import { Boss } from "../objects/Boss";
 import { Enemy } from "../objects/Enemy";
 import { Maths } from "../utils/Maths";
 import { IObject } from "../objects/IObject";
@@ -12,6 +14,7 @@ export class Game extends AScene {
     private _time = 0;
 
     private _player = new Player(Texture.from("spaceship_01.png"));
+    private _boss = new Boss(Texture.from("boss.png"));
 
     private _objects: IObject[] = [];
 
@@ -24,6 +27,7 @@ export class Game extends AScene {
     private _timeBeforeMissile = 0;
     private _missileTime = Math.random() * 3;
 
+    private _gameOver = false;
     private _win = false;
 
     constructor() {
@@ -37,6 +41,10 @@ export class Game extends AScene {
         this._player.y = Main.SCREEN_HEIGHT - this._player.height - 50;
         this.addChild(this._player);
         this._objects.push(this._player);
+
+        this._boss.y = 40;
+        this.addChild(this._boss);
+        this._objects.push(this._boss);
 
         for (let i = 0; i < 8; ++i)
             for (let j = 0; j < 3; ++j) {
@@ -84,16 +92,16 @@ export class Game extends AScene {
                 this._moveEnemyInvert = this._moveEnemyPos == 10;
 
                 for (const enemy of enemies) {
-                    if (this._moveEnemyInvert) (enemy as Enemy).y += 5;
-                    else (enemy as Enemy).x += 5;
+                    if (this._moveEnemyInvert) enemy.y += 5;
+                    else enemy.x += 5;
                 }
             } else if (this._moveEnemyPos > 0 && this._moveEnemyInvert) {
                 --this._moveEnemyPos;
                 this._moveEnemyInvert = this._moveEnemyPos != 0;
 
                 for (const enemy of enemies) {
-                    if (!this._moveEnemyInvert) (enemy as Enemy).y += 5;
-                    else (enemy as Enemy).x -= 5;
+                    if (!this._moveEnemyInvert) enemy.y += 5;
+                    else enemy.x -= 5;
                 }
             }
         }
@@ -105,11 +113,8 @@ export class Game extends AScene {
         this._timeBeforeMissile += timeDelta / 20;
         if (this._timeBeforeMissile > this._missileTime && enemies.length > 0) {
             const enemy = enemies[Maths.randomIntBetweenTwoNumbers(0, enemies.length)] as Enemy;
-            const bullet = new Bullet(false);
-            bullet.x = enemy.x + (enemy.width - bullet.width) / 2;
-            bullet.y = enemy.y + enemy.height + 5;
-            this.addChild(bullet);
-            this._objects.push(bullet);
+
+            this.enemyBullet(enemy);
 
             this._missileTime = Math.random() * 3;
             this._timeBeforeMissile = 0;
@@ -118,27 +123,24 @@ export class Game extends AScene {
         //check collisions
         for (const bullet of bullets) {
             for (const enemy of enemies) {
-                if (
-                    !(enemy as Enemy).hit &&
-                    (bullet as Bullet).fromPlayer &&
-                    Maths.isIntersecting(enemy as Enemy, bullet as Bullet)
-                ) {
+                if (!enemy.hit && bullet.fromPlayer && Maths.isIntersecting(enemy, bullet)) {
                     bullet.kill = true;
-                    (enemy as Enemy).hit = true;
+                    enemy.hit = true;
                 }
             }
 
-            if (
-                !this._player.hit &&
-                !(bullet as Bullet).fromPlayer &&
-                Maths.isIntersecting(this._player as Player, bullet as Bullet)
-            ) {
+            if (!this._boss.hit && bullet.fromPlayer && Maths.isIntersecting(this._boss, bullet)) {
+                bullet.kill = true;
+                this._boss.hit = true;
+            }
+
+            if (!this._player.hit && !bullet.fromPlayer && Maths.isIntersecting(this._player, bullet)) {
                 bullet.kill = true;
                 this._player.hit = true;
 
-                setTimeout(() => {
-                    Main.instance.scene = new Game();
-                }, 300);
+                if (!this._gameOver) setTimeout(() => (Main.instance.scene = new EndGame(false)), 300);
+
+                this._gameOver = true;
             }
         }
 
@@ -152,6 +154,21 @@ export class Game extends AScene {
 
         this._time += timeDelta / 100;
         this._timeTxt.text = Math.floor(this._time) + " s";
+
+        if (!this._win && this._boss.kill && enemies.length == 0) {
+            this._win = true;
+
+            setTimeout(() => (Main.instance.scene = new EndGame(true, Math.floor(this._time))), 300);
+        }
+    }
+
+    public enemyBullet(from: Container) {
+        const bullet = new Bullet(false);
+        bullet.x = from.x + (from.width - bullet.width) / 2;
+        bullet.y = from.y + from.height + 5;
+        this.addChild(bullet);
+
+        this._objects.push(bullet);
     }
 
     private _shoot() {

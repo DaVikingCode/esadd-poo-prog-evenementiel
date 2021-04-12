@@ -2,7 +2,7 @@ import "./style.css";
 import gsap, { Linear } from "gsap";
 import { Application, Container, Graphics, Loader, Rectangle } from "pixi.js";
 import { AScene } from "./scenes/AScene";
-import { Game } from "./scenes/Game";
+import { Home } from "./scenes/Home";
 import { Maths } from "./utils/Maths";
 
 export class Main extends Application {
@@ -82,7 +82,7 @@ export class Main extends Application {
 
         this._onResize();
 
-        this.scene = new Game();
+        this.scene = new Home();
     }
 
     public update() {
